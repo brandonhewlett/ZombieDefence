@@ -1,9 +1,13 @@
+import BulletController from "./bulletController.js";
+
 export default class Player{
-    constructor(x, y, speed, canvas){
+    constructor(x, y, speed, canvas, wX){
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.canvas = canvas.getBoundingClientRect();
+        this.bulletController = new BulletController();
+        this.wallX = wX;
         this.upPressed = false;
         this.downPressed = false;
         this.leftPressed = false;
@@ -19,11 +23,12 @@ export default class Player{
         context.fillStyle="#FF0000";
         context.fill();
         context.closePath();
+        this.bulletController.draw(context);
     }
 
     movement() {
         if (this.rightPressed) {
-            this.x += Math.min(this.speed, this.canvas.width - this.x);
+            this.x += Math.min(this.speed, this.wallX - this.x);
         }
         if (this.leftPressed) {
             this.x -= Math.min(this.speed, 0 + this.x);
@@ -34,6 +39,10 @@ export default class Player{
         if (this.upPressed) {
             this.y -= Math.min(this.speed, 0 + this.y);
         }
+    }
+
+    shoot(cursorX, cursorY) {
+        this.bulletController.shoot(this.x, this.y, 10, this.canvas.width, this.canvas.height, cursorX, cursorY);
     }
 
     keyDownHandler = (e) => {
@@ -51,7 +60,6 @@ export default class Player{
                 this.downPressed = true;
                 break;
             default:
-                console.log("What the hell am I doing?");
                 break;
         }
     }
@@ -71,7 +79,6 @@ export default class Player{
                 this.downPressed = false;
                 break;
             default:
-                console.log("What the hell am I doing?");
                 break;
         }
     }

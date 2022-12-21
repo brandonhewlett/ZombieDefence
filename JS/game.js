@@ -6,14 +6,21 @@ window.onload = startup;
 
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
-const player = new Player(0, 0, 7, canvas);
-const cursor = new Cursor(canvas);
 const wall = new Wall();
+const player = new Player(0, 0, 7, canvas, wall.getX());
+const cursor = new Cursor(canvas);
+
+canvas.addEventListener("click", shoot, false);
+
 var playingGame = true;
 
 function startup(){
     canvas.onmousemove = mouseMove;
     gameLoop();
+}
+
+function shoot(){
+    player.shoot(cursor.getX(), cursor.getY());
 }
 
 function mouseMove(evt) {
@@ -33,3 +40,4 @@ function play(){
     cursor.draw(context);
     wall.draw(context);
 }
+
