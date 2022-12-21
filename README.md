@@ -1,2 +1,2 @@
 # ZombieDefence
- A simple Javascript game inspired by Con Artist Games' The Last Stand
+ A simple Javascript game inspired by "The Last Stand" by Con Artist Games
