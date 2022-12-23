@@ -1,17 +1,33 @@
 export default class Wall{
     constructor(){
         this.x = 200;
+        this.hp = 500;
+        this.width = 10;
     }
 
     draw(context){
-        context.beginPath();
-        context.rect(this.x, 10, 10, 380);
-        context.fillStyle = "#000000";
-        context.fill();
-        context.closePath();
+        if (this.hp > 0){
+            context.beginPath();
+            context.rect(this.x, 10, this.width, 380);
+            context.fillStyle = "#000000";
+            context.fill();
+            context.closePath();
+        }
+    }
+
+    damage(dmg){
+        this.hp -= dmg;
     }
 
     getX(){
         return this.x;
+    }
+
+    getSpacer(){
+        return this.x + this.width;
+    }
+
+    getHP(){
+        return this.hp;
     }
 }

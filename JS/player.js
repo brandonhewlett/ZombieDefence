@@ -14,6 +14,7 @@ export default class Player{
         this.rightPressed = false;
         document.addEventListener("keydown", this.keyDownHandler, false);
         document.addEventListener("keyup", this.keyUpHandler, false);
+        document.addEventListener("bulletHit", this.bulletHit, false);
     }
 
     draw(context){
@@ -64,7 +65,7 @@ export default class Player{
         }
     }
     
-    keyUpHandler = (e) => {;
+    keyUpHandler = (e) => {
         switch (e.key) {
             case "ArrowRight":
                 this.rightPressed = false;
@@ -81,5 +82,14 @@ export default class Player{
             default:
                 break;
         }
+    }
+
+    bulletHit = (e) => {
+        this.bulletController.deleteBullet(e.detail);
+        console.log(e.detail);
+    }
+
+    getBullets(){
+        return this.bulletController.getBullets();
     }
 }

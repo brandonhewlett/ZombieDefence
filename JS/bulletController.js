@@ -23,9 +23,16 @@ export default class BulletController{
             for (let i = this.bullets.length - 1; i >= 0; i--){
                 if (!this.bullets[i].checkVisibility()){
                     this.bullets.splice(i, 1);
-                    console.log ("You've been spliced!");
                 }
             }
         }
+    }
+
+    getBullets(){
+        return this.bullets;
+    }
+
+    deleteBullet(i){
+        this.bullets.splice(i, 1);
     }
 }
