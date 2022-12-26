@@ -43,6 +43,6 @@ export default class Bullet{
     }
 
     getY(){
-        return this.x;
+        return this.y;
     }
 }

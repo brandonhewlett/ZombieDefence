@@ -85,8 +85,7 @@ export default class Player{
     }
 
     bulletHit = (e) => {
-        this.bulletController.deleteBullet(e.detail);
-        console.log(e.detail);
+        this.bulletController.deleteBullet(e.detail.key);
     }
 
     getBullets(){

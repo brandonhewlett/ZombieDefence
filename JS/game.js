@@ -5,6 +5,7 @@ import ZombieController from "./zombieController.js";
 
 window.onload = startup;
 
+//Declaring constants and vars for game function
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
 const wall = new Wall();
@@ -15,6 +16,7 @@ const zomCon = new ZombieController();
 canvas.addEventListener("click", shoot, false);
 
 var playingGame = true;
+
 
 function startup(){
     canvas.onmousemove = mouseMove;

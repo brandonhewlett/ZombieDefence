@@ -33,23 +33,21 @@ export default class ZombieController{
 
     bulletCollisionCheck(bullets, sender){
         try{
-            bullets.forEach((bullet, index) => {
+            bullets.forEach((bullet, key) => {
                 for (let i = this.zombies.length - 1; i >= 0; i--){
-                    let hit = this.zombies[i].bulletCollisionCheck(bullet);
-                    if (hit){
-                        console.log("Hit!");
+                    if (this.zombies[i].bulletCollisionCheck(bullet)){
                         this.kill(i)
                         i = -1
                         if (sender = "p"){
-                            document.dispatchEvent(new CustomEvent('bulletHit', {detail: {index}}));
+                            document.dispatchEvent(new CustomEvent('bulletHit', {detail: {key}}));
                         } else if (sender = "b"){
-                            document.dispatchEvent(new CustomEvent('buddyBulletHit',{detail: {index}}));
+                            document.dispatchEvent(new CustomEvent('buddyBulletHit',{detail: {key}}));
                         }
                     }
                 }
             })
         } catch(e) {
-            console.log(e);
+            
         } 
     }
 

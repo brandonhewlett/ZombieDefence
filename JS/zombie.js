@@ -25,9 +25,10 @@ export default class Zombie{
 
     //TODO: Change hard-coding of radius
     bulletCollisionCheck(bullet){
-        let dx = this.x - bullet.getX();
-        let dy = this.y - bullet.getY();
+        let dx = bullet.getX() - this.x;
+        let dy = bullet.getY() - this.y;
         let rad = 10+2.5;
+        
 
         if((dx*dx)+(dy*dy) < (rad*rad)){
             return true;
