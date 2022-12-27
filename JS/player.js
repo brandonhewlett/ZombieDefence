@@ -91,4 +91,12 @@ export default class Player{
     getBullets(){
         return this.bulletController.getBullets();
     }
+
+    getX(){
+        return this.x;
+    }
+
+    getY(){
+        return this.y;
+    }
 }

@@ -14,7 +14,7 @@ export default class Bullet{
         this.updatePosition();
         context.beginPath();
         context.arc(this.x, this.y, 2.5, 0, 2*Math.PI);
-        context.fillStyle = "#00FF00";
+        context.fillStyle = "#000000";
         context.fill();
         context.closePath();
     }

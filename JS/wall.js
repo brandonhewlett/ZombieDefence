@@ -3,6 +3,7 @@ export default class Wall{
         this.x = 200;
         this.hp = 500;
         this.width = 10;
+        document.addEventListener("attackWall", this.damageWall, false);
     }
 
     draw(context){
@@ -29,5 +30,9 @@ export default class Wall{
 
     getHP(){
         return this.hp;
+    }
+
+    damageWall = (e) => {
+        this.hp -= e.detail;
     }
 }

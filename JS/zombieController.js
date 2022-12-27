@@ -3,6 +3,9 @@ import Zombie from "./zombie.js";
 export default class ZombieController{
     constructor (){
         this.zombies = [];
+        this.wave1 = [];
+        this.wave2 = [];
+        this.wave3 = [];
     }
 
     draw(context){
@@ -13,7 +16,7 @@ export default class ZombieController{
         }
     }
 
-    move(w, px = 0, py = 0){
+    move(w, px, py){
         if (this.zombies.length != 0){
             if (w > 0){
                 this.zombies.forEach((zombie) => {
@@ -64,6 +67,7 @@ export default class ZombieController{
     }
 
     kill(i){
+        this.zombies[i].stopAttackTimer();
         this.zombies.splice(i, 1);
     }
 }

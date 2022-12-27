@@ -48,8 +48,20 @@ function play(){
     player.draw(context);
     cursor.draw(context);
     wall.draw(context);
-    zomCon.move(wall.getHP());
+    if (wall.getHP() > 0){
+        zomCon.move(wall.getHP());
+    } else {
+        zomCon.move(wall.getHP(), player.getX(), player.getY());
+    }
+    
     zomCon.draw(context);
     zomCon.bulletCollisionCheck(player.getBullets(), "p");
+    if (zomCon.playerCollisionCheck(player.getX(), player.getY())){
+        stopGame();
+    }
+}
+
+function stopGame(){
+    playingGame = false;
 }
 
