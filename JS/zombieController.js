@@ -3,21 +3,23 @@ import Zombie from "./zombie.js";
 export default class ZombieController{
     constructor (){
         this.zombies = [];
-        this.wave1 = [];
-        this.wave2 = [];
-        this.wave3 = [];
+        this.waves = [[], [], []];
+        this.currentWave = -1;
     }
 
     draw(context){
-        if (this.zombies.length != 0){
+        /*if (this.zombies.length != 0){
             this.zombies.forEach((zombie) => {
                 zombie.draw(context);
             })
-        }
+        }*/
+        this.waves[this.currentWave].forEach((zombie) => {
+            zombie.draw(context);
+        })
     }
 
     move(w, px, py){
-        if (this.zombies.length != 0){
+        /*if (this.zombies.length != 0){
             if (w > 0){
                 this.zombies.forEach((zombie) => {
                     zombie.moveToWall()
@@ -27,37 +29,53 @@ export default class ZombieController{
                     zombie.moveToPlayer(px, py)
                 })
             }
+        }*/
+        if (w > 0){
+            this.waves[this.currentWave].forEach((zombie) => {
+                zombie.moveToWall();
+            })
+        } else {
+            this.waves[this.currentWave].forEach((zombie) => {
+                zombie.moveToPlayer(px, py);
+            })
         }
     }
 
-    spawn(){
-        this.zombies.push(new Zombie());
+    populateWaves(dayNumber){
+        //log 1.1 + 10
+        let count = (Math.log(dayNumber) / Math.log(1.1)) + 10;
+        for (let i = 0; i < count; i++){
+            this.waves[0].push(new Zombie(dayNumber));
+        }
+        for (let i = 0; i < count; i++){
+            this.waves[1].push(new Zombie(dayNumber));
+        }
+        for (let i = 0; i < count; i++){
+            this.waves[2].push(new Zombie(dayNumber));
+        }
+        this.currentWave = 0;
     }
 
     bulletCollisionCheck(bullets, sender){
-        try{
-            bullets.forEach((bullet, key) => {
-                for (let i = this.zombies.length - 1; i >= 0; i--){
-                    if (this.zombies[i].bulletCollisionCheck(bullet)){
-                        this.kill(i)
-                        i = -1
-                        if (sender = "p"){
-                            document.dispatchEvent(new CustomEvent('bulletHit', {detail: {key}}));
-                        } else if (sender = "b"){
-                            document.dispatchEvent(new CustomEvent('buddyBulletHit',{detail: {key}}));
-                        }
+        bullets.forEach((bullet, key) => {
+            for (let i = this.waves[this.currentWave].length - 1; i >= 0; i--){
+                if (this.waves[this.currentWave][i].bulletCollisionCheck(bullet)){
+                    this.kill(i)
+                    i = -1
+                    if (sender = "p"){
+                        document.dispatchEvent(new CustomEvent('bulletHit', {detail: {key}}));
+                    } else if (sender = "b"){
+                        document.dispatchEvent(new CustomEvent('buddyBulletHit',{detail: {key}}));
                     }
                 }
-            })
-        } catch(e) {
-            
-        } 
+            }
+        })
     }
 
     playerCollisionCheck(px, py){
-        for (let i = this.zombies.length - 1; i >= 0; i--){
-            if (this.zombies.length !=0){
-                var hit = this.zombies[i].playerCollisionCheck(px, py);
+        for (let i = this.waves[this.currentWave].length - 1; i >= 0; i--){
+            if (this.waves[this.currentWave].length !=0){
+                var hit = this.waves[this.currentWave][i].playerCollisionCheck(px, py);
                 if (hit){
                     i = -1
                     return true;
@@ -67,7 +85,31 @@ export default class ZombieController{
     }
 
     kill(i){
-        this.zombies[i].stopAttackTimer();
-        this.zombies.splice(i, 1);
+        if (this.waves[this.currentWave][i].hit() == 0){
+            document.dispatchEvent(new CustomEvent('kill',{detail: 1}));
+            this.waves[this.currentWave][i].stopAttackTimer();
+            this.waves[this.currentWave].splice(i, 1);
+            if (this.waves[this.currentWave].length == 0){
+                this.currentWave += 1;
+                if (this.currentWave > 2){
+                    document.dispatchEvent(new CustomEvent("waveEnd"));
+                }
+            }
+        }
+    }
+
+    randomInt(min, max){
+        return Math.floor(Math.random() * (max - min + 1) ) + min;
+    }
+
+    resetToDefault(){
+        this.waves.forEach(waveArray => {
+            waveArray.forEach(zombie => {
+                zombie.stopAttackTimer();
+            })
+        });
+
+        this.waves = [[], [], []];
+        this.currentWave = -1;
     }
 }

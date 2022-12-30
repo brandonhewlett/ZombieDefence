@@ -14,10 +14,19 @@ export default class Wall{
             context.fill();
             context.closePath();
         }
+        context.beginPath();
+        context.font = "24px Arial";
+        context.fillStyle = "black";
+        context.textAlign = "left";
+        context.fillText("Wall HP: " + this.hp, 10, 70);
+        context.closePath();
     }
 
     damage(dmg){
         this.hp -= dmg;
+        if (this.hp < 0){
+            this.hp = 0;
+        }
     }
 
     getX(){
@@ -34,5 +43,9 @@ export default class Wall{
 
     damageWall = (e) => {
         this.hp -= e.detail;
+    }
+
+    resetToDefault(){
+        this.hp = 500;
     }
 }

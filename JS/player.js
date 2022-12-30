@@ -99,4 +99,8 @@ export default class Player{
     getY(){
         return this.y;
     }
+
+    resetToDefault(){
+        this.bulletController.resetToDefault();
+    }
 }

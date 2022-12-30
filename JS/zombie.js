@@ -1,18 +1,73 @@
 export default class Zombie{
-    constructor(){
-        this.x = 1000;
+    constructor(currentDay){
+        this.x = this.randomInt(1500, 2000);
         this.y = this.randomInt(15, 385);
-        this.speed = 5;
-        this.power = 1;
+        this.speed = 0;
+        this.power = 0;
+        this.health = 0;
+        this.color = null;
         this.attackTimer = null;
+        this.determineType(currentDay);
     }
 
     draw(context){
         context.beginPath();
         context.arc(this.x, this.y, 10, 0, 2*Math.PI);
-        context.fillStyle="#00FF00";
+        context.fillStyle=this.color;
         context.fill();
         context.closePath();
+    }
+
+    determineType(currentDay){
+        let speedThreshold = 0;
+        let bruteThreshold = 0;
+
+        switch (currentDay){
+            default:
+                speedThreshold = 51;
+                bruteThreshold = 76;
+                break;
+            case 1: 
+                speedThreshold = 101;
+                bruteThreshold = 101;
+                break;
+            case 2:
+            case 3:
+                speedThreshold = 81;
+                bruteThreshold = 91;
+                break;
+            case 4:
+            case 5:
+            case 6:
+                speedThreshold = 71;
+                bruteThreshold = 86;
+                break;
+            case 7:
+            case 8:
+            case 9:
+                speedThreshold = 61;
+                bruteThreshold = 81;
+                break;
+        }
+
+        let determiner = this.randomInt(1, 100);
+
+        if (determiner < speedThreshold){
+            this.speed = 3;
+            this.power = 1;
+            this.health = 3;
+            this.color = "#009900";
+        }else if (determiner < bruteThreshold){
+            this.speed = 6;
+            this.power = 1;
+            this.health = 1;
+            this.color = "#00FF00";
+        }else {
+            this.speed = 2;
+            this.power = 3;
+            this.health = 6;
+            this.color = "#004900";
+        }
     }
 
     moveToWall(){
@@ -52,6 +107,11 @@ export default class Zombie{
         }else{
             return false;
         }
+    }
+
+    hit(){
+        this.health -= 1;
+        return this.health;
     }
 
     attack = () => {

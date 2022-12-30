@@ -37,4 +37,9 @@ export default class BulletController{
     deleteBullet(i){
         this.bullets.delete(i);
     }
+
+    resetToDefault(){
+        this.bullets.clear();
+        this.uniqueID = 0;
+    }
 }
