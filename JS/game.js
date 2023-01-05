@@ -10,8 +10,11 @@ window.onload = startup;
 //Declaring constants and vars for game function
 const canvas = document.getElementById("gameCanvas");
 const context = canvas.getContext("2d");
+const upgradePanel = document.getElementById("upgradePanel");
+const repairButton = document.getElementById("repairWall");
+const upgradeWallButton = document.getElementById("upgradeWall");
 const wall = new Wall();
-const player = new Player(0, 0, 7, canvas, wall.getX());
+const player = new Player(100, 200, 7, canvas, wall.getX());
 const cursor = new Cursor(canvas);
 const zomCon = new ZombieController();
 const dayCon = new DayController();
@@ -20,7 +23,11 @@ const startButton = document.getElementById("start");
 
 canvas.addEventListener("click", shoot, false);
 startButton.addEventListener("click", startGame, false);
+repairButton.addEventListener("click", repairWall, false);
+upgradeWallButton.addEventListener("click", upgradeWall, false);
+
 document.addEventListener("waveEnd", waveEnd, false);
+document.addEventListener("redrawWaveEndGraphics", redrawWaveEndGraphics, false);
 
 var playingGame = false;
 var waveStart = false;
@@ -34,6 +41,7 @@ function startGame(){
         waveStart = true;
         dayCon.newDay();
         zomCon.populateWaves(dayCon.getDay());
+        upgradePanel.style.display = "none";
     }
 }
 
@@ -48,6 +56,14 @@ function shoot(){
 
 function mouseMove(evt) {
     cursor.move(evt);
+}
+
+function repairWall(){
+    upCon.repairWall();
+}
+
+function upgradeWall(){
+    upCon.upgradeWall();
 }
 
 function gameLoop(){
@@ -94,6 +110,18 @@ function waveEnd(){
     context.clearRect(0, 0, 900, 400);
     waveStart = false;
     startButton.style.display = "block";
-    player.resetToDefault();
+    upgradePanel.style.display = "block";
+    player.resetBullets();
+    upCon.drawWaveEnd(context);
+    dayCon.drawWaveEnd(context);
+    wall.drawWaveEnd(context);
+}
+
+function redrawWaveEndGraphics(){
+    console.log ("redraw");
+    context.clearRect(0, 0, 900, 400);
+    upCon.drawWaveEnd(context);
+    dayCon.drawWaveEnd(context);
+    wall.drawWaveEnd(context);
 }
 

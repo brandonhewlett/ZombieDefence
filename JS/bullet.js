@@ -1,8 +1,9 @@
 export default class Bullet{
-    constructor (sX, sY, speed, w, h, cursorX, cursorY){
+    constructor (sX, sY, speed, power, w, h, cursorX, cursorY){
         this.x = sX;
         this.y = sY;
         this.speed = speed;
+        this.power = power;
         this.vx = 0;
         this.vy = 0;
         this.canvasX = w;

@@ -13,3 +13,9 @@
     position: relative;
     top: 30%
 }
+#upgradePanel{
+    display: none;
+}
+#warningLabel{
+    color: red;
+}

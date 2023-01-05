@@ -100,6 +100,10 @@ export default class Player{
         return this.y;
     }
 
+    resetBullets(){
+        this.bulletController.resetBullets();
+    }
+
     resetToDefault(){
         this.bulletController.resetToDefault();
     }

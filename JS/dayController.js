@@ -12,6 +12,15 @@ export default class DayController{
         context.closePath();
     }
 
+    drawWaveEnd(context){
+        context.beginPath();
+        context.font = "24px Arial";
+        context.fillStyle = "black";
+        context.textAlign = "Center";
+        context.fillText("You survived day " + this.dayCounter, 450, 80);
+        context.closePath();
+    }
+
     newDay(){
         this.dayCounter += 1;
     }
