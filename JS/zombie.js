@@ -109,8 +109,8 @@ export default class Zombie{
         }
     }
 
-    hit(){
-        this.health -= 1;
+    hit(power){
+        this.health -= power;
         return this.health;
     }
 

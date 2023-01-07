@@ -4,6 +4,7 @@ import Wall from "./wall.js";
 import ZombieController from "./zombieController.js";
 import DayController from "./dayController.js";
 import UpgradeController from "./upgradeController.js";
+import BuddyController from "./buddyController.js";
 
 window.onload = startup;
 
@@ -13,26 +14,33 @@ const context = canvas.getContext("2d");
 const upgradePanel = document.getElementById("upgradePanel");
 const repairButton = document.getElementById("repairWall");
 const upgradeWallButton = document.getElementById("upgradeWall");
+const upgradeDamageButton = document.getElementById("upgradeDamage");
+const buyABuddyButton = document.getElementById("buyABuddy");
 const wall = new Wall();
 const player = new Player(100, 200, 7, canvas, wall.getX());
 const cursor = new Cursor(canvas);
 const zomCon = new ZombieController();
 const dayCon = new DayController();
 const upCon = new UpgradeController();
+const buddyCon = new BuddyController(canvas);
 const startButton = document.getElementById("start");
 
 canvas.addEventListener("click", shoot, false);
 startButton.addEventListener("click", startGame, false);
 repairButton.addEventListener("click", repairWall, false);
 upgradeWallButton.addEventListener("click", upgradeWall, false);
+upgradeDamageButton.addEventListener("click", upgradeDamage, false);
+buyABuddyButton.addEventListener("click", buyABuddy, false);
 
 document.addEventListener("waveEnd", waveEnd, false);
 document.addEventListener("redrawWaveEndGraphics", redrawWaveEndGraphics, false);
 
 var playingGame = false;
 var waveStart = false;
+var buddyShootTimer = null;
 
 function startGame(){
+    upCon.clearWarningLabel();
     startButton.style.display = "none";
     if (!playingGame){
         playingGame = true;
@@ -42,6 +50,9 @@ function startGame(){
         dayCon.newDay();
         zomCon.populateWaves(dayCon.getDay());
         upgradePanel.style.display = "none";
+        if (buddyCon.getCount() > 0){
+            buddyShootTimer = setInterval(buddyShoot, 1000);
+        }
     }
 }
 
@@ -52,6 +63,13 @@ function startup(){
 
 function shoot(){
     player.shoot(cursor.getX(), cursor.getY());
+    if (buddyCon.length > 0){
+        buddyCon.shoot(zomCon.getRandomZombies(buddyCon.length));
+    }
+}
+
+function buddyShoot(){
+    buddyCon.shoot(zomCon.getRandomZombies(buddyCon.getCount()));
 }
 
 function mouseMove(evt) {
@@ -64,6 +82,14 @@ function repairWall(){
 
 function upgradeWall(){
     upCon.upgradeWall();
+}
+
+function upgradeDamage(){
+    upCon.upgradeDamage();
+}
+
+function buyABuddy(){
+    upCon.buyABuddy();
 }
 
 function gameLoop(){
@@ -80,6 +106,7 @@ function play(){
     wall.draw(context);
     upCon.draw(context);
     dayCon.draw(context);
+    buddyCon.draw(context);
     if (wall.getHP() > 0){
         zomCon.move(wall.getHP());
     } else {
@@ -91,6 +118,9 @@ function play(){
         stopGame();
     }
     zomCon.bulletCollisionCheck(player.getBullets(), "p");
+    for(let i = 0; i < buddyCon.getCount(); i++){
+        zomCon.bulletCollisionCheck(buddyCon.getBullets(i), i);
+    }
 }
 
 function stopGame(){
@@ -98,7 +128,8 @@ function stopGame(){
     playingGame = false;
     waveStart = false;
     startButton.style.display = "block";
-
+    clearTimeout(buddyShootTimer);
+    buddyShootTimer = null;
     player.resetToDefault();
     zomCon.resetToDefault();
     wall.resetToDefault();
@@ -111,10 +142,13 @@ function waveEnd(){
     waveStart = false;
     startButton.style.display = "block";
     upgradePanel.style.display = "block";
+    clearTimeout(buddyShootTimer);
+    buddyShootTimer = null;
     player.resetBullets();
     upCon.drawWaveEnd(context);
     dayCon.drawWaveEnd(context);
     wall.drawWaveEnd(context);
+    buddyCon.drawWaveEnd(context);
 }
 
 function redrawWaveEndGraphics(){
@@ -123,5 +157,6 @@ function redrawWaveEndGraphics(){
     upCon.drawWaveEnd(context);
     dayCon.drawWaveEnd(context);
     wall.drawWaveEnd(context);
+    buddyCon.drawWaveEnd(context);
 }
 

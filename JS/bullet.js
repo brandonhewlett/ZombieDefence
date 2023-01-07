@@ -46,4 +46,8 @@ export default class Bullet{
     getY(){
         return this.y;
     }
+
+    getPower(){
+        return this.power;
+    }
 }

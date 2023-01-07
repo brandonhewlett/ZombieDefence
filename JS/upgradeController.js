@@ -6,9 +6,9 @@ export default class UpgradeController{
         this.warningLabel = document.getElementById("warningLabel");
 
         this.repairCost = 15;
-        this.upgradeCost = 100;
+        this.upgradeCost = 45;
         this.damageCost = 20;
-        this.buddyCost = 70;
+        this.buddyCost = 10;
 
         document.addEventListener("kill", this.kill, false);
         document.addEventListener("deductPayment", this.deductPayment, false);
@@ -45,8 +45,14 @@ export default class UpgradeController{
             case "upgradeWall":
                 this.currency -= this.upgradeCost;
                 break;
+            case "upgradeDamage":
+                this.currency -= this.damageCost;
+                break;
+            case "addBuddy":
+                this.currency -= this.buddyCost;
+                break;
             default:
-                //I have broken something, and I am making that your problem
+                //I have broken something, and I am making that the player's problem
                 this.currency = 0;
         }
         document.dispatchEvent(new CustomEvent("redrawWaveEndGraphics"));
@@ -77,7 +83,23 @@ export default class UpgradeController{
     }
 
     upgradeDamage(){
-        document.dispatchEvent(new CustomEvent("upgradeDamage"));
+        if (this.currency - this.damageCost >= 0){
+            document.dispatchEvent(new CustomEvent("upgradeDamage"));
+        }else{
+            this.displayErrorMessage("Not enough funds to upgrade your damage");
+        }
+    }
+
+    buyABuddy(){
+        if (this.currency - this.buddyCost >= 0){
+            document.dispatchEvent(new CustomEvent("addBuddy"));
+        }else{
+            this.displayErrorMessage("Not enough funds to buy a buddy");
+        }
+    }
+
+    clearWarningLabel(){
+        this.warningLabel.innerText = "";
     }
 
     resetToDefault(){

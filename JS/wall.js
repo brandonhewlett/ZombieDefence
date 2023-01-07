@@ -67,7 +67,6 @@ export default class Wall{
             }
             document.dispatchEvent(new CustomEvent('deductPayment',{detail: "repairWall"}));
         }
-        
     }
 
     upgradeWall = (e) => {

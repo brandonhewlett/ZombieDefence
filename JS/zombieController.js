@@ -8,28 +8,12 @@ export default class ZombieController{
     }
 
     draw(context){
-        /*if (this.zombies.length != 0){
-            this.zombies.forEach((zombie) => {
-                zombie.draw(context);
-            })
-        }*/
         this.waves[this.currentWave].forEach((zombie) => {
             zombie.draw(context);
         })
     }
 
     move(w, px, py){
-        /*if (this.zombies.length != 0){
-            if (w > 0){
-                this.zombies.forEach((zombie) => {
-                    zombie.moveToWall()
-                })
-            } else {
-                this.zombies.forEach((zombie) => {
-                    zombie.moveToPlayer(px, py)
-                })
-            }
-        }*/
         if (w > 0){
             this.waves[this.currentWave].forEach((zombie) => {
                 zombie.moveToWall();
@@ -57,19 +41,22 @@ export default class ZombieController{
     }
 
     bulletCollisionCheck(bullets, sender){
-        bullets.forEach((bullet, key) => {
-            for (let i = this.waves[this.currentWave].length - 1; i >= 0; i--){
-                if (this.waves[this.currentWave][i].bulletCollisionCheck(bullet)){
-                    this.kill(i)
-                    i = -1
-                    if (sender = "p"){
-                        document.dispatchEvent(new CustomEvent('bulletHit', {detail: {key}}));
-                    } else if (sender = "b"){
-                        document.dispatchEvent(new CustomEvent('buddyBulletHit',{detail: {key}}));
+        if (this.currentWave >= 0 && this.currentWave <= 2){
+            bullets.forEach((bullet, key) => {
+                for (let i = this.waves[this.currentWave].length - 1; i >= 0; i--){
+                    if (this.waves[this.currentWave][i].bulletCollisionCheck(bullet)){
+                        this.kill(i, bullet.getPower());
+                        i = -1;
+                        console.log("Bullet Hit by Buddy " + sender);
+                        if (sender == "p"){
+                            document.dispatchEvent(new CustomEvent('bulletHit', {detail: {key}}));
+                        } else {
+                            document.dispatchEvent(new CustomEvent('buddyBulletHit',{detail: {key, sender}}));
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     playerCollisionCheck(px, py){
@@ -77,15 +64,15 @@ export default class ZombieController{
             if (this.waves[this.currentWave].length !=0){
                 var hit = this.waves[this.currentWave][i].playerCollisionCheck(px, py);
                 if (hit){
-                    i = -1
+                    i = -1;
                     return true;
                 }
             }
         }
     }
 
-    kill(i){
-        if (this.waves[this.currentWave][i].hit() == 0){
+    kill(i, power){
+        if (this.waves[this.currentWave][i].hit(power) <= 0){
             document.dispatchEvent(new CustomEvent('kill',{detail: 1}));
             this.waves[this.currentWave][i].stopAttackTimer();
             this.waves[this.currentWave].splice(i, 1);
@@ -96,6 +83,14 @@ export default class ZombieController{
                 }
             }
         }
+    }
+
+    getRandomZombies(count){
+        let returnArray = [];
+        for (let i = 1; i <= count; i++){
+            returnArray.push(this.waves[this.currentWave][this.randomInt(0, this.waves[this.currentWave].length - 1)]);
+        }
+        return returnArray;
     }
 
     randomInt(min, max){

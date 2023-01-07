@@ -15,6 +15,7 @@ export default class Player{
         document.addEventListener("keydown", this.keyDownHandler, false);
         document.addEventListener("keyup", this.keyUpHandler, false);
         document.addEventListener("bulletHit", this.bulletHit, false);
+        document.addEventListener("upgradeDamage", this.upgradeDamage, false);
     }
 
     draw(context){
@@ -90,6 +91,10 @@ export default class Player{
 
     getBullets(){
         return this.bulletController.getBullets();
+    }
+
+    upgradeDamage = (e) => {
+        this.bulletController.upgradeDamage();
     }
 
     getX(){

@@ -5,7 +5,6 @@ export default class BulletController{
         this.bullets = new Map();
         this.power = 1;
         this.uniqueID = 0;
-        document.addEventListener("upgradeDamage", this.upgradeDamage, false);
     }
     
     draw(context){
@@ -40,9 +39,12 @@ export default class BulletController{
         this.bullets.delete(i);
     }
 
-    upgradeDamage = (e) =>{
+    upgradeDamage(){
         if (this.power < 3){
-            
+            this.power += 1;
+            document.dispatchEvent(new CustomEvent('deductPayment',{detail: "upgradeDamage"}));
+        }else{
+            document.dispatchEvent(new CustomEvent('displayError', {detail: "Your damage can't get any higher"}))
         }
     }
 
