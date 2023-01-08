@@ -58,7 +58,18 @@ function startGame(){
 
 function startup(){
     canvas.onmousemove = mouseMove;
+    titleScreenDraw();
     gameLoop();
+}
+
+function titleScreenDraw(){
+    context.beginPath();
+    context.font = "36px Arial";
+    context.fillStyle = "black";
+    context.textAlign = "center";
+    context.fillText("ZOMBIE", 450, 150);
+    context.fillText("DEFENCE", 450, 185);
+    context.closePath();
 }
 
 function shoot(){
@@ -125,6 +136,7 @@ function play(){
 
 function stopGame(){
     context.clearRect(0, 0, 900, 400);
+    gameOverDraw();
     playingGame = false;
     waveStart = false;
     startButton.style.display = "block";
@@ -135,6 +147,17 @@ function stopGame(){
     wall.resetToDefault();
     upCon.resetToDefault();
     dayCon.resetToDefault();
+    buddyCon.resetToDefault();
+}
+
+function gameOverDraw(){
+    context.beginPath();
+    context.font = "36px Arial";
+    context.fillStyle = "red";
+    context.textAlign = "center";
+    context.fillText("GAME OVER", 450, 170);
+    context.fillText("You died on day " + dayCon.getDay(), 450, 250);
+    context.closePath();
 }
 
 function waveEnd(){
@@ -152,7 +175,6 @@ function waveEnd(){
 }
 
 function redrawWaveEndGraphics(){
-    console.log ("redraw");
     context.clearRect(0, 0, 900, 400);
     upCon.drawWaveEnd(context);
     dayCon.drawWaveEnd(context);

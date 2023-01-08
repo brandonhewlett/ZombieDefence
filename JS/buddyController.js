@@ -63,11 +63,14 @@ export default class BuddyController{
     }
 
     bulletHit = (e) =>{
-        console.log(e.detail);
         this.buddies[e.detail.sender].deleteBullet(e.detail.key);
     }
 
     getCount(){
         return this.buddies.length;
+    }
+
+    resetToDefault(){
+        this.buddies = [];
     }
 }

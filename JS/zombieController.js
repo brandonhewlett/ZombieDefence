@@ -47,7 +47,6 @@ export default class ZombieController{
                     if (this.waves[this.currentWave][i].bulletCollisionCheck(bullet)){
                         this.kill(i, bullet.getPower());
                         i = -1;
-                        console.log("Bullet Hit by Buddy " + sender);
                         if (sender == "p"){
                             document.dispatchEvent(new CustomEvent('bulletHit', {detail: {key}}));
                         } else {
