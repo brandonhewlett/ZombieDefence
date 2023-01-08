@@ -30,6 +30,11 @@ export default class UpgradeController{
         context.fillStyle = "black";
         context.textAlign = "center";
         context.fillText("Money: $" + this.currency, 450, 110);
+        context.font = "16px Arial";
+        context.fillText("$" + this.repairCost, 45, 390);
+        context.fillText("$" + this.upgradeCost, 150, 390);
+        context.fillText("$" + this.damageCost, 270, 390);
+        context.fillText("$" + this.buddyCost, 375, 390);
         context.closePath();
     }
 

@@ -78,6 +78,9 @@ export default class Zombie{
     }
 
     moveToPlayer(px, py){
+        if (this.attackTimer != null){
+            this.stopAttackTimer();
+        }
         var d = Math.atan2(py - this.y, px - this.x);
         this.x += Math.cos(d) * (this.speed/2);
         this.y += Math.sin(d) * (this.speed/2);
@@ -124,5 +127,6 @@ export default class Zombie{
 
     stopAttackTimer(){
         clearInterval(this.attackTimer);
+        this.attackTimer = null;
     }
 }

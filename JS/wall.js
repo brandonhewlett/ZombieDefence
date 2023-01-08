@@ -80,6 +80,6 @@ export default class Wall{
     }
 
     resetToDefault(){
-        this.hp = 500;
+        this.hp = 100;
     }
 }

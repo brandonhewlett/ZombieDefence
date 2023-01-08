@@ -42,6 +42,7 @@ var buddyShootTimer = null;
 function startGame(){
     upCon.clearWarningLabel();
     startButton.style.display = "none";
+    canvas.style.cursor = "none";
     if (!playingGame){
         playingGame = true;
     }
@@ -135,6 +136,7 @@ function play(){
 }
 
 function stopGame(){
+    canvas.style.cursor = "default";
     context.clearRect(0, 0, 900, 400);
     gameOverDraw();
     playingGame = false;
@@ -161,6 +163,7 @@ function gameOverDraw(){
 }
 
 function waveEnd(){
+    canvas.style.cursor = "default";
     context.clearRect(0, 0, 900, 400);
     waveStart = false;
     startButton.style.display = "block";
