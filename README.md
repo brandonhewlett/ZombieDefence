@@ -22,7 +22,8 @@ Try and survive as long as you can!
 
 # TODO
 Add sounds\
-Add code documentation
+Add code documentation\
+Modify buddy shooting behaviour to operate independently, rather than as a group
 
 # Acknowledgements
 None yet, but that'll probably change when I add sounds
