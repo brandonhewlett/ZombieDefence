@@ -1,5 +1,5 @@
 # Zombie Defence
- A simple Javascript game inspired by "The Last Stand" by Con Artist Games
+ A simple Javascript game inspired by "The Last Stand" by Con Artist Games\
 Go to https://brandonhewlett.github.io/ZombieDefence/ to play
 
 # Controls
