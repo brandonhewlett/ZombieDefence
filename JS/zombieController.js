@@ -5,6 +5,12 @@ export default class ZombieController{
         this.zombies = [];
         this.waves = [[], [], []];
         this.currentWave = -1;
+        this.kill1Sound = new Audio("./Sounds/kill1.wav");
+        this.kill2Sound = new Audio("./Sounds/kill2.wav");
+        this.kill3Sound = new Audio("./Sounds/kill3.wav");
+        this.hit1Sound = new Audio("./Sounds/hit1.wav");
+        this.hit2Sound = new Audio("./Sounds/hit2.wav");
+        this.hit3Sound = new Audio("./Sounds/hit3.wav");
     }
 
     draw(context){
@@ -22,6 +28,34 @@ export default class ZombieController{
             this.waves[this.currentWave].forEach((zombie) => {
                 zombie.moveToPlayer(px, py);
             })
+        }
+    }
+
+    hitSound(){
+        switch(this.randomInt(1, 3)){
+            case 1:
+                this.hit1Sound.play();
+                break;
+            case 2:
+                this.hit2Sound.play();
+                break;
+            case 3:
+                this.hit3Sound.play();
+                break;
+        }
+    }
+
+    killSound(){
+        switch(this.randomInt(1, 3)){
+            case 1:
+                this.kill1Sound.play();
+                break;
+            case 2:
+                this.kill2Sound.play();
+                break;
+            case 3:
+                this.kill3Sound.play();
+                break;
         }
     }
 
@@ -73,6 +107,7 @@ export default class ZombieController{
     kill(i, power){
         if (this.waves[this.currentWave][i].hit(power) <= 0){
             document.dispatchEvent(new CustomEvent('kill',{detail: 1}));
+            this.killSound();
             this.waves[this.currentWave][i].stopAttackTimer();
             this.waves[this.currentWave].splice(i, 1);
             if (this.waves[this.currentWave].length == 0){
@@ -81,6 +116,8 @@ export default class ZombieController{
                     document.dispatchEvent(new CustomEvent("waveEnd"));
                 }
             }
+        }else{
+            this.hitSound();
         }
     }
 

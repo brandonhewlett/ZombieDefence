@@ -4,6 +4,9 @@ export default class Wall{
         this.hp = 100;
         this.maxHP = 100;
         this.width = 10;
+        this.wallHit1Sound = new Audio("./Sounds/wallhit1.wav");
+        this.wallHit2Sound = new Audio("./Sounds/wallhit2.wav");
+        this.wallHit3Sound = new Audio("./Sounds/wallhit3.wav");
         document.addEventListener("attackWall", this.damageWall, false);
         document.addEventListener("repairWall", this.repairWall, false);
         document.addEventListener("upgradeWall", this.upgradeWall, false);
@@ -55,6 +58,21 @@ export default class Wall{
 
     damageWall = (e) => {
         this.hp -= e.detail;
+        this.wallHitSound();
+    }
+
+    wallHitSound(){
+        switch(this.randomInt(1, 3)){
+            case 1:
+                this.wallHit1Sound.play();
+                break;
+            case 2:
+                this.wallHit2Sound.play();
+                break;
+            case 3:
+                this.wallHit3Sound.play();
+                break;
+        }
     }
 
     repairWall = (e) => {
@@ -77,6 +95,10 @@ export default class Wall{
             this.hp += 100;
             document.dispatchEvent(new CustomEvent('deductPayment',{detail: "upgradeWall"}));
         }
+    }
+
+    randomInt(min, max){
+        return Math.floor(Math.random() * (max - min + 1) ) + min;
     }
 
     resetToDefault(){

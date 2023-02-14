@@ -21,9 +21,9 @@ After each day, you can get upgrades that will aid in your survival.\
 Try and survive as long as you can!
 
 # TODO
-Add sounds\
 Add code documentation\
-Modify buddy shooting behaviour to operate independently, rather than as a group
+Add more upgrades
+Modify buddy shooting behaviour to operate independently, rather than as a group\
 
 # Acknowledgements
-None yet, but that'll probably change when I add sounds
+All sounds were created using [Chiptone by SFB Games](https://sfbgames.itch.io/chiptone), which allows all sounds created to be used freely for any purpose under the [CC0 license](https://creativecommons.org/publicdomain/zero/1.0/)

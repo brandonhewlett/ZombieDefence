@@ -25,6 +25,8 @@ const upCon = new UpgradeController();
 const buddyCon = new BuddyController(canvas);
 const startButton = document.getElementById("start");
 
+const dieSound = new Audio('./Sounds/dead.wav');
+
 canvas.addEventListener("click", shoot, false);
 startButton.addEventListener("click", startGame, false);
 repairButton.addEventListener("click", repairWall, false);
@@ -74,7 +76,9 @@ function titleScreenDraw(){
 }
 
 function shoot(){
-    player.shoot(cursor.getX(), cursor.getY());
+    if (waveStart){
+        player.shoot(cursor.getX(), cursor.getY());
+    }
     if (buddyCon.length > 0){
         buddyCon.shoot(zomCon.getRandomZombies(buddyCon.length));
     }
@@ -150,6 +154,7 @@ function stopGame(){
     upCon.resetToDefault();
     dayCon.resetToDefault();
     buddyCon.resetToDefault();
+    dieSound.play();
 }
 
 function gameOverDraw(){

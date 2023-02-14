@@ -1,6 +1,7 @@
 export default class DayController{
     constructor() {
         this.dayCounter = 0;
+        this.waveSound = new Audio('./Sounds/wavestart.wav');
     }
 
     draw(context){
@@ -23,6 +24,7 @@ export default class DayController{
 
     newDay(){
         this.dayCounter += 1;
+        this.waveSound.play();
     }
 
     getDay(){

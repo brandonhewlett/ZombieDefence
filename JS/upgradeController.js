@@ -10,6 +10,9 @@ export default class UpgradeController{
         this.damageCost = 20;
         this.buddyCost = 10;
 
+        this.buySound = new Audio ("./Sounds/buy.wav");
+        this.errorSound = new Audio ("./Sounds/error.wav");
+
         document.addEventListener("kill", this.kill, false);
         document.addEventListener("deductPayment", this.deductPayment, false);
         document.addEventListener("displayError", this.displayErrorMessage, false);
@@ -60,6 +63,7 @@ export default class UpgradeController{
                 //I have broken something, and I am making that the player's problem
                 this.currency = 0;
         }
+        this.buySound.play();
         document.dispatchEvent(new CustomEvent("redrawWaveEndGraphics"));
     }
 
@@ -69,6 +73,7 @@ export default class UpgradeController{
         }else{
             this.warningLabel.innerText = e.detail;
         }
+        this.errorSound.play();
     }
 
     repairWall(){
