@@ -21,9 +21,10 @@ After each day, you can get upgrades that will aid in your survival.\
 Try and survive as long as you can!
 
 # TODO
-Add code documentation\
-Add more upgrades
+Add more upgrades\
 Modify buddy shooting behaviour to operate independently, rather than as a group\
+Refactor to remove multiple uses of randomInt function\
+Address any TODOs listed in comments
 
 # Acknowledgements
 All sounds were created using [Chiptone by SFB Games](https://sfbgames.itch.io/chiptone), which allows all sounds created to be used freely for any purpose under the [CC0 license](https://creativecommons.org/publicdomain/zero/1.0/)

@@ -1,9 +1,12 @@
+/**
+ * Upgrade Controller, used for handling upgrades and currency tracking
+ */
 export default class UpgradeController{
+    /**
+     * Constructor. Sets upgrade costs, adds event listeners, and adds sounds
+     */
     constructor(){
         this.currency = 0;
-        this.damageUpgrade1 = false;
-        this.damageUpgrade2 = false;
-        this.warningLabel = document.getElementById("warningLabel");
 
         this.repairCost = 15;
         this.upgradeCost = 45;
@@ -13,11 +16,17 @@ export default class UpgradeController{
         this.buySound = new Audio ("./Sounds/buy.wav");
         this.errorSound = new Audio ("./Sounds/error.wav");
 
+        this.warningLabel = document.getElementById("warningLabel");
+
         document.addEventListener("kill", this.kill, false);
         document.addEventListener("deductPayment", this.deductPayment, false);
         document.addEventListener("displayError", this.displayErrorMessage, false);
     }
 
+    /**
+     * Draws the current currency amount onto the canvas
+     * @param {CanvasRenderingContext2D} context - Context for drawing onto the canvas
+     */
     draw(context){
         context.beginPath();
         context.font = "24px Arial";
@@ -27,6 +36,10 @@ export default class UpgradeController{
         context.closePath();
     }
 
+    /**
+     * Draws the currency onto the canvas at wave end
+     * @param {CanvasRenderingContext2D} context - Context for drawing onto the canvas
+     */
     drawWaveEnd(context){
         context.beginPath();
         context.font = "24px Arial";
@@ -41,10 +54,18 @@ export default class UpgradeController{
         context.closePath();
     }
 
+    /**
+     * Handler for kill event, which adds currency to the total based on event details
+     * @param {Event} e - The event with details regarding currency amount
+     */
     kill = (e) => {
         this.currency += e.detail;
     }
 
+    /**
+     * Handler for payment event, which deducts cost from currency based on event details
+     * @param {Event} e - The event with details regarding upgrade type
+     */
     deductPayment = (e) => {
         switch(e.detail){
             case "repairWall":
@@ -67,6 +88,10 @@ export default class UpgradeController{
         document.dispatchEvent(new CustomEvent("redrawWaveEndGraphics"));
     }
 
+    /**
+     * Handler for error event, which displays the passed error message in the warning label
+     * @param {*} e - Event or string containing the error message to be displayed
+     */
     displayErrorMessage = (e) => {
         if (typeof e === "string"){
             this.warningLabel.innerText = e;
@@ -76,6 +101,9 @@ export default class UpgradeController{
         this.errorSound.play();
     }
 
+    /**
+     * Dispatches a repair wall event for the wall handler
+     */
     repairWall(){
         if (this.currency - this.repairCost >= 0){
             document.dispatchEvent(new CustomEvent("repairWall"));
@@ -84,6 +112,9 @@ export default class UpgradeController{
         }
     }
 
+    /**
+     * Dispatches an upgrade wall event for the wall handler
+     */
     upgradeWall(){
         if (this.currency - this.upgradeCost >= 0){
             document.dispatchEvent(new CustomEvent("upgradeWall"));
@@ -92,6 +123,9 @@ export default class UpgradeController{
         }
     }
 
+    /**
+     * Dispatches a upgrade damage event for the player handler
+     */
     upgradeDamage(){
         if (this.currency - this.damageCost >= 0){
             document.dispatchEvent(new CustomEvent("upgradeDamage"));
@@ -100,6 +134,9 @@ export default class UpgradeController{
         }
     }
 
+    /**
+     * Dispatches an add buddy event for the buddy controller handler
+     */
     buyABuddy(){
         if (this.currency - this.buddyCost >= 0){
             document.dispatchEvent(new CustomEvent("addBuddy"));
@@ -108,10 +145,16 @@ export default class UpgradeController{
         }
     }
 
+    /**
+     * Clear the warning label text
+     */
     clearWarningLabel(){
         this.warningLabel.innerText = "";
     }
 
+    /**
+     * Reset currency to 0 when game ends
+     */
     resetToDefault(){
         this.currency = 0;
     }

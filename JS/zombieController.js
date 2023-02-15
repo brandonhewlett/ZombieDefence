@@ -1,8 +1,13 @@
 import Zombie from "./zombie.js";
 
+/**
+ * Zombie Controller, used for handling the various groups of zombies
+ */
 export default class ZombieController{
+    /**
+     * Constructor. Initializes zombie arrays and adds audio
+     */
     constructor (){
-        this.zombies = [];
         this.waves = [[], [], []];
         this.currentWave = -1;
         this.kill1Sound = new Audio("./Sounds/kill1.wav");
@@ -13,12 +18,22 @@ export default class ZombieController{
         this.hit3Sound = new Audio("./Sounds/hit3.wav");
     }
 
+    /**
+     * Iterates through the current wave of zombies and draws them on the canvas
+     * @param {CanvasRenderingContext2D} context - Context for drawing onto the canvas
+     */
     draw(context){
         this.waves[this.currentWave].forEach((zombie) => {
             zombie.draw(context);
         })
     }
 
+    /**
+     * Determines the movement type needed for the zombies based on passed-in values and instructs each zombie in the current wave to move properly
+     * @param {int} w - The current health of the wall
+     * @param {int} px - The current X coordinate of the player (can be null)
+     * @param {int} py - The current Y coordinate of the player (can be null)
+     */
     move(w, px, py){
         if (w > 0){
             this.waves[this.currentWave].forEach((zombie) => {
@@ -31,6 +46,9 @@ export default class ZombieController{
         }
     }
 
+    /**
+     * Plays a random hit sound when a zombie is shot
+     */
     hitSound(){
         switch(this.randomInt(1, 3)){
             case 1:
@@ -45,6 +63,9 @@ export default class ZombieController{
         }
     }
 
+    /**
+     * Plays a random kill sound when a zombie is killed
+     */
     killSound(){
         switch(this.randomInt(1, 3)){
             case 1:
@@ -59,6 +80,10 @@ export default class ZombieController{
         }
     }
 
+    /**
+     * Populate the three waves of the day with new zombies
+     * @param {int} dayNumber - The current day
+     */
     populateWaves(dayNumber){
         //log 1.1 + 10
         let count = (Math.log(dayNumber) / Math.log(1.1)) + 10;
@@ -74,6 +99,12 @@ export default class ZombieController{
         this.currentWave = 0;
     }
 
+    /**
+     * Checks each bullet against each zombie to see if any have collided.
+     * If they have, damage the zombie in question, stop checking the current bullet, and dispatch an event to either the player or the buddies, based on the sender.
+     * @param {Map} bullets - A map of bullets
+     * @param {string} sender - A character indicating which bullet controller sent the call for bullet collision checking
+     */
     bulletCollisionCheck(bullets, sender){
         if (this.currentWave >= 0 && this.currentWave <= 2){
             bullets.forEach((bullet, key) => {
@@ -92,6 +123,13 @@ export default class ZombieController{
         }
     }
 
+    /**
+     * Check the player against each zombie to see if they have collided.
+     * If they have, stop checking and return true
+     * @param {int} px - The current X coordinate of the player
+     * @param {int} py - The current Y coordinate of the player
+     * @returns 
+     */
     playerCollisionCheck(px, py){
         for (let i = this.waves[this.currentWave].length - 1; i >= 0; i--){
             if (this.waves[this.currentWave].length !=0){
@@ -104,6 +142,14 @@ export default class ZombieController{
         }
     }
 
+    /**
+     * Damage zombie i based on power. 
+     * If it has no health, dispatch a kill event for the upgrade controller, stop the zombie's attack timer, kill it, and iterate the wave number if necessary.
+     * If the final wave is dead, dispatch a waveEnd event. 
+     * If the zombie is still alive, just play a hit sound.
+     * @param {int} i 
+     * @param {int} power 
+     */
     kill(i, power){
         if (this.waves[this.currentWave][i].hit(power) <= 0){
             document.dispatchEvent(new CustomEvent('kill',{detail: 1}));
@@ -121,6 +167,11 @@ export default class ZombieController{
         }
     }
 
+    /**
+     * Acquire and return an array of random zombies with size equal to count. Used for getting targets for buddies to shoot at
+     * @param {int} count - The number of zombies to grab and return
+     * @returns {Zombie[]} - An array of random zombies
+     */
     getRandomZombies(count){
         let returnArray = [];
         for (let i = 1; i <= count; i++){
@@ -129,10 +180,19 @@ export default class ZombieController{
         return returnArray;
     }
 
+    /**
+     * Returns a random integer between the min and max values, inclusive
+     * @param {int} min - The minimum possible int value
+     * @param {int} max - The maximum possible int value
+     * @returns {int} A random integer
+     */
     randomInt(min, max){
         return Math.floor(Math.random() * (max - min + 1) ) + min;
     }
 
+    /**
+     * Resets zombie controller to default state, stopping all attack timers and clearing zombie arrays
+     */
     resetToDefault(){
         this.waves.forEach(waveArray => {
             waveArray.forEach(zombie => {
